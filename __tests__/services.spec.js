@@ -306,9 +306,11 @@ describe('services', () => {
             throw new Error
         }
         expect(await sendMessage('templateId', { id: '123', name: 'me' }, 'accessToken', [{
+            name: 'name1',
             value: 'value1',
             color: 'color1'
         }, {
+            name: 'name2',
             value: 'value2',
             color: 'color2'
         }])).toEqual({
@@ -323,9 +325,11 @@ describe('services', () => {
             }
         }
         expect(await sendMessage('templateId', { id: '123', name: 'me' }, 'accessToken', [{
+            name: 'name1',
             value: 'value1',
             color: 'color1'
         }, {
+            name: 'name2',
             value: 'value2',
             color: 'color2'
         }])).toEqual({
@@ -341,9 +345,11 @@ describe('services', () => {
             { id: '123', name: 'me' },
             { id: '456', name: 'you' }
         ], 'accessToken', [{
+            name: 'name1',
             value: 'value1',
             color: 'color1'
         }, {
+            name: 'name2',
             value: 'value2',
             color: 'color2'
         }])).toEqual({
@@ -364,9 +370,11 @@ describe('services', () => {
             { id: '123', name: 'me' },
             { id: '456', name: 'you' }
         ], 'accessToken', [{
+            name: 'name1',
             value: 'value1',
             color: 'color1'
         }, {
+            name: 'name2',
             value: 'value2',
             color: 'color2'
         }])).toEqual({
