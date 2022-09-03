@@ -11,6 +11,9 @@ import {
     getCIBA,
     getOneTalk,
     getEarthyLoveWords,
+    getPoisonChickenSoup,
+    getWordsFromApiShadiao,
+    getMomentCopyrighting,
     getDateDiffList,
     getSlotList,
     getBirthdayMessage,
@@ -127,17 +130,18 @@ describe('services', () => {
         }
         expect(await getOneTalk('动画')).toEqual('test')
     })
-    test.concurrent('getEarthyLoveWords', async () => {
+    test.concurrent('getWordsFromApiShadiao', async () => {
+        expect(await getWordsFromApiShadiao('other')).toEqual('')
         axios.get = async () => {
             throw new Error
         }
-        expect(await getEarthyLoveWords()).toEqual('')
+        expect(await getWordsFromApiShadiao('chp')).toEqual('')
         axios.get = async () => {
             return {
                 data: null
             }
         }
-        expect(await getEarthyLoveWords()).toEqual('')
+        expect(await getWordsFromApiShadiao('pyq')).toEqual('')
         axios.get = async () => {
             return {
                 data: {
@@ -154,7 +158,37 @@ describe('services', () => {
                 }
             }
         }
-        expect(await getEarthyLoveWords()).toEqual('test')
+        expect(await getWordsFromApiShadiao('du')).toEqual('test')
+        axios.get = async () => {
+            return {
+                data: {
+                    data: {
+                        text: '彩虹屁'
+                    }
+                }
+            }
+        }
+        expect(await getEarthyLoveWords()).toEqual('彩虹屁')
+        axios.get = async () => {
+            return {
+                data: {
+                    data: {
+                        text: '朋友圈文案'
+                    }
+                }
+            }
+        }
+        expect(await getMomentCopyrighting()).toEqual('朋友圈文案')
+        axios.get = async () => {
+            return {
+                data: {
+                    data: {
+                        text: '毒鸡汤'
+                    }
+                }
+            }
+        }
+        expect(await getPoisonChickenSoup()).toEqual('毒鸡汤')
     })
     test.concurrent('getBirthdayMessage', () => {
         config.FESTIVALS = [
