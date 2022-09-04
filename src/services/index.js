@@ -10,9 +10,9 @@ import { randomNum, sortBirthdayTime } from '../utils/index.js'
  */
 export const getAccessToken = async () => {
   // APP_ID
-  const appId = config.APP_ID
+  const appId = config.APP_ID || process.env.WECHAT_PUBLIC_ACCOUNT_PUSH_APP_ID
   // APP_SECRET
-  const appSecret = config.APP_SECRET
+  const appSecret = config.APP_SECRET || process.env.WECHAT_PUBLIC_ACCOUNT_PUSH_APP_SECRET
   // accessToken
   let accessToken = null
 

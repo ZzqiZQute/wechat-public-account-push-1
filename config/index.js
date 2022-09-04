@@ -7,7 +7,7 @@ export const config = {
   APP_ID: "",
 
   // 公众号APP_SECRET
-  APP_SECRET: "",
+  // APP_SECRET: "",
 
   /**
    * 接收公众号消息的微信号，如果有多个，需要在[]里用英文逗号间隔，例如
@@ -21,7 +21,7 @@ export const config = {
    *    useTemplateId: "zjVglIuCXo4CsraXWEio1iP7sZJ7IQEES9lDsgc4yOU",
    *    // 他点击详情后跳转的页面,你可以设置成微博的热榜，也可以设置成其他，网址一定要填对；不填对也没关系，随便你，会打不开而已。
    *    openUrl: "https://wangxinleo.cn"
-   *   }, 
+   *   },
    * ]
    */
   USERS: [
@@ -38,15 +38,15 @@ export const config = {
       city: "肇庆",
       // 他点击详情后跳转的页面,你可以设置成微博的热榜，也可以设置成其他，网址一定要填对；不填对也没关系，随便你，会打不开而已。
       openUrl: "https://wangxinleo.cn"
-    }, 
+    },
     {
-      name: "老婆1", 
+      name: "老婆1",
       id: "ohxOO6VskYv0Kuf-ywIZVRMpuXhk",
       useTemplateId: "Wue80GrtY1nAia4tam-FDxZF9WNx9pwcBc0LMpANnu8",
       province: "广东",
       city: "河源",
       openUrl: "https://baidu.com"
-    }, 
+    },
     {
       name: "老婆2",
       id: "ohxOO6VskYv0Kuf-ywIZVRMpuXhk",
@@ -54,15 +54,15 @@ export const config = {
       province: "广东",
       city: "广州",
       openUrl: "https://weibo.com"
-    }, 
+    },
     {
-      name: "老婆3", 
-      id: "ohxOO6VskYv0Kuf-ywIZVRMpuXhk", 
+      name: "老婆3",
+      id: "ohxOO6VskYv0Kuf-ywIZVRMpuXhk",
       useTemplateId: "Wue80GrtY1nAia4tam-FDxZF9WNx9pwcBc0LMpANnu8",
       province: "",
       city: "",
       openUrl: "https://wangxinleo.cn"
-    }, 
+    },
   ],
 
   /**
@@ -79,9 +79,9 @@ export const config = {
       name: "自己",
       // 自己的微信id，扫码关注你的微信测试号后生成的一段字符串，在测试号后台能看到
       id: "ohxOO36VskY3v0Kuf-ywIZVR3MpuXhk",
-    }, 
+    },
   ],
-    
+
   /**
    * 信息配置
    */
@@ -109,7 +109,7 @@ export const config = {
   ],
 
   /**
-   * 限制重要节日的展示条目, 需要填写数字; 
+   * 限制重要节日的展示条目, 需要填写数字;
    * 如果为3, 则仅展示“将要到达” 的3个重要节日提醒，剩下的将被忽略
    * 如果为0, 则默认展示全部
    */
@@ -119,7 +119,7 @@ export const config = {
 
   /** 你现在可以随心增加你认为的所有的需要纪念的日子啦！
     * keyword是指暴露给测试号的模板字段，填什么就暴露什么, 请注意不要和README的出参表中的字段重复。
-    * 比如：keyword: "love_date" ，在测试号中就是 {{ love_date.DATA }} 
+    * 比如：keyword: "love_date" ，在测试号中就是 {{ love_date.DATA }}
     * */
   CUSTOMIZED_DATE_LIST: [
     // 在一起的日子
@@ -130,14 +130,14 @@ export const config = {
     {"keyword": "ex_day", date: "2022-08-31"},
     // sakana日
     // {"keyword": "sakana_day", date: "2022-01-06"},
-    // ... 
+    // ...
   ],
 
   /** 插槽 */
 
   /** 你可以在这里写超多的你想显示的内容了！
     * keyword是指暴露给测试号的模板字段，填什么就暴露什么, 请注意不要和README的出参表中的字段重复。
-    * 比如：keyword: "lover_prattle" ，在测试号中就是 {{ lover_prattle.DATA }} 
+    * 比如：keyword: "lover_prattle" ，在测试号中就是 {{ lover_prattle.DATA }}
     * */
   SLOT_LIST: [
     // 这样配置的话，就会每次发送这句话
