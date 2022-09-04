@@ -174,6 +174,18 @@ wechat-public-account-push 实现自消息推送的原理，是通过调用一�
 
 ### 1.4. 第四步：启用workflow自动任务，定时执行
 
+- 点击Settings按钮
+![图片无法查看请移步顶部访问 国内备用仓库地址](img/action-secret.png)
+- 点击下方左侧菜单中 Security -> Actions 我们需要配置以下两个secret
+  - WECHAT_PUBLIC_ACCOUNT_PUSH_APP_ID
+  - WECHAT_PUBLIC_ACCOUNT_PUSH_APP_SECRET
+
+  ![图片无法查看请移步顶部访问 国内备用仓库地址](img/action-secret-2.png)
+- 点击上面的New repository secret即可添加新的secret
+![图片无法查看请移步顶部访问 国内备用仓库地址](img/action-secret-3.png)
+
+### 1.5. 第五步：启用workflow自动任务，定时执行
+
 - 启用action脚本
 
 ![图片无法查看请移步顶部访问 国内备用仓库地址](img/action.png)
@@ -184,13 +196,11 @@ wechat-public-account-push 实现自消息推送的原理，是通过调用一�
 
 ![图片无法查看请移步顶部访问 国内备用仓库地址](img/action.png)
 
-### 1.5. 第五步(选做)：检查脚本是否可以正常执行
+### 1.6. 第六步(选做)：检查脚本是否可以正常执行
 
 - 手动启动脚本
 
 ![图片无法查看请移步顶部访问 国内备用仓库地址](img/action-test.png)
-
-### 1.5. 第五步(选做)：检查脚本是否可以正常执行
 
 - 查看执行结果
 
