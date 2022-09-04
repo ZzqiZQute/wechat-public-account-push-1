@@ -20,15 +20,18 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    # 添加定时任务指定运行分支 默认为master
-    - uses: actions/checkout@v3
-      with:
-          ref: 'feature/secrets'
+      # 添加定时任务指定运行分支 默认为master
+      - uses: actions/checkout@v3
+        with:
+            ref: 'feature/secrets'
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run dev --if-present
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run dev --if-present
+        env:
+          WECHAT_PUBLIC_ACCOUNT_PUSH_APP_ID: ${{ secrets.WECHAT_PUBLIC_ACCOUNT_PUSH_APP_ID }}
+          WECHAT_PUBLIC_ACCOUNT_PUSH_APP_SECRET: ${{ secrets.WECHAT_PUBLIC_ACCOUNT_PUSH_APP_SECRET }}
