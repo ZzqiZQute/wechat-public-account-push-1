@@ -15,7 +15,6 @@ export const getAccessToken = async () => {
   const appSecret = config.APP_SECRET || process.env.WECHAT_PUBLIC_ACCOUNT_PUSH_APP_SECRET
   // accessToken
   let accessToken = null
-  console.log(appId, appSecret)
 
   const postUrl = `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${ appId }&secret=${ appSecret }`
 
