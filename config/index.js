@@ -3,10 +3,10 @@ export const config = {
    * 公众号配置
    */
 
-  // 公众号APP_ID
-  APP_ID: "",
+  // 公众号APP_ID (推荐在Github Actions里配置）
+  // APP_ID: "",
 
-  // 公众号APP_SECRET
+  // 公众号APP_SECRET (推荐在Github Actions里配置）
   // APP_SECRET: "",
 
   /**
