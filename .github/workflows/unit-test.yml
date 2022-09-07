@@ -21,7 +21,12 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-      - uses: actions/checkout@v3
+      - if: ${{ env.GITHUB_EVENT_NAME == 'push' }}
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ env.GITHUB_REF }}
+      - if: ${{ env.GITHUB_EVENT_NAME == 'pull_request' }}
+        uses: actions/checkout@v3
         with:
           ref: ${{ env.GITHUB_HEAD_REF }}
 
