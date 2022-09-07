@@ -4,9 +4,7 @@
 name: unit-test
 
 on:
-  push:
-    branches:
-      - '*'
+  push: null
   pull_request:
     branches:
       - main
