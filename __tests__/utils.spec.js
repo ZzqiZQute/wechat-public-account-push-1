@@ -1,4 +1,4 @@
-import { toLowerLine, getColor, randomNum, sortBirthdayTime } from '../src/utils'
+import { toLowerLine, getColor, randomNum, sortBirthdayTime, getConstellation } from '../src/utils'
 import MockDate from 'mockdate'
 
 describe('utils', () => {
@@ -49,5 +49,9 @@ describe('utils', () => {
             }
         ])
         MockDate.reset()
+    })
+    test('getConstellation', () => {
+        expect(getConstellation('09-22')).toEqual('virgo')
+        expect(getConstellation('09-23')).toEqual('libra')
     })
 })
