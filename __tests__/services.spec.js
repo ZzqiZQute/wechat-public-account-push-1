@@ -474,6 +474,7 @@ describe('services', () => {
         })
     })
     test('get(Flatten)ConstellationFortune', async () => {
+        config.CONSTELLATION_FORTUNE = [{"date": "09-02", "name": "老婆0"}]
         axios.get = async () => {
             throw new Error
         }

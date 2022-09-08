@@ -61,5 +61,9 @@ const constellationEn = ['aries', 'taurus', 'gemini', 'cancer', 'leo', 'virgo', 
 export const getConstellation = (date) => {
   const [month, day] = date.split('-').map(Number)
   const solar = Solar.fromYmd(year, month, day)
-  return constellationEn[constellationCn.indexOf(solar.getXingZuo())]
+  const cn = solar.getXingZuo();
+  return {
+    cn,
+    en: constellationEn[constellationCn.indexOf(cn)]
+  }
 }

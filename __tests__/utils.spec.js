@@ -51,7 +51,7 @@ describe('utils', () => {
         MockDate.reset()
     })
     test('getConstellation', () => {
-        expect(getConstellation('09-22')).toEqual('virgo')
-        expect(getConstellation('09-23')).toEqual('libra')
+        expect(getConstellation('09-22')).toEqual({cn: '处女', en: 'virgo'})
+        expect(getConstellation('09-23')).toEqual({cn: '天秤', en: 'libra'})
     })
 })

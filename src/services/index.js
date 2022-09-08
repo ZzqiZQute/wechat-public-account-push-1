@@ -437,7 +437,7 @@ export async function getConstellationFortune() {
       value: []
     };
     result.push(value)
-    const constellation = getConstellation(item.date)
+    const { en: constellation } = getConstellation(item.date)
     const periods = ['今日', '明日', '本周', '本月', '今年']
     for (let i = 0; i < periods.length; i++) {
       const url = `https://www.xzw.com/fortune/${ constellation }/${i}.html`
