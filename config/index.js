@@ -120,6 +120,7 @@ export const config = {
   /**
    * 星座运势
    * date 请填写阳历生日，name请填写名称（在模板中使用）
+   * 多人情况请在数组中添加新项
    */
   CONSTELLATION_FORTUNE: [
     {"date": "09-02", "name": "老婆0"}
