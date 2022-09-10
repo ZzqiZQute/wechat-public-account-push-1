@@ -57,7 +57,6 @@ function getAllDeps(p, paths) {
         await execa('babel', [dep, '-d', `build-tc/${ dep }`])
     }
     await fs.writeFile('build-tc/index.js', `
-const execa = require('execa')
 const { main } = require('./main')
 
 exports.main_handler = async function () {
