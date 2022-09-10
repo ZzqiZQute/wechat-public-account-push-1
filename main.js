@@ -59,11 +59,11 @@ const mainForProd = async () => {
   }
 }
 
-const main = () => {
+const main = async () => {
   if (process.env.APP_MODE === 'test'){
-    mainForTest()
+    await mainForTest()
   } else {
-    mainForProd()
+    await mainForProd()
   }
 }
 
