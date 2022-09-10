@@ -48,6 +48,7 @@ function getAllDeps(p, paths) {
     await execa('babel', ['main-for-test.js', '-o', 'build-tc/main-for-test.js'])
     await fs.copy('package.json', 'build-tc/package.json')
     await fs.writeFile('build-tc/package.json', (await fs.readFile('build-tc/package.json')).toString().replace(/"type": "module"/, '"type": "commonjs"'))
+    await fs.writeFile('build-tc/main.js', (await fs.readFile('build-tc/main.js')).toString().replace(/\nmain\(\)/m, '\n exports.main = main;'))
     await execa('npm', ['i', '--no-save'])
     const deps = []
     getAllDeps('.', deps)
@@ -57,9 +58,10 @@ function getAllDeps(p, paths) {
     }
     await fs.writeFile('build-tc/index.js', `
 const execa = require('execa')
+const { main } = require('./main')
 
 exports.main_handler = async function () {
-    await execa('npm', ['run', 'dev'])
+    await main()
 }
     `.trim())
     const output = fs.createWriteStream('./build-tc.zip')
