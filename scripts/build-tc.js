@@ -54,7 +54,6 @@ function getAllDeps(p, paths) {
     getAllDeps('.', deps)
     for (const dep of deps) {
         await fs.copy(dep, `build-tc/${ dep }`)
-        await execa('babel', [dep, '-d', `build-tc/${ dep }`])
     }
     await fs.writeFile('build-tc/index.js', `
 const { main } = require('./main')
