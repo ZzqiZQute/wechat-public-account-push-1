@@ -1,6 +1,13 @@
 import axios from 'axios'
 import dayjs from 'dayjs'
 import { JSDOM } from 'jsdom'
+import puppeteer from 'puppeteer'
+import sirv from 'sirv'
+import * as http from 'http'
+import FormData from 'form-data'
+import { fileURLToPath } from 'url'
+import * as path from 'path'
+import { toByteArray } from 'base64-js'
 
 import config from '../../config/exp-config.js'
 import TEMPLATE_CONFIG from '../../config/template-config.cjs'
@@ -464,7 +471,7 @@ export const getBirthdayMessage = (festivals) => {
   }
 
   if (Object.prototype.toString.call(festivals) !== '[object Array]'
-    || festivals.length === 0) {
+      || festivals.length === 0) {
     festivals = null
   }
 
@@ -485,7 +492,7 @@ export const getBirthdayMessage = (festivals) => {
   birthdayList.forEach((item, index) => {
     if (
       !config.FESTIVALS_LIMIT
-      || (config.FESTIVALS_LIMIT && index < config.FESTIVALS_LIMIT)
+        || (config.FESTIVALS_LIMIT && index < config.FESTIVALS_LIMIT)
     ) {
       let message = null
 
@@ -532,7 +539,7 @@ export const getBirthdayMessage = (festivals) => {
  */
 export const getDateDiffList = (customizedDateList) => {
   if (Object.prototype.toString.call(customizedDateList) !== '[object Array]'
-    && Object.prototype.toString.call(config.CUSTOMIZED_DATE_LIST) !== '[object Array]') {
+      && Object.prototype.toString.call(config.CUSTOMIZED_DATE_LIST) !== '[object Array]') {
     return []
   }
   const dateList = customizedDateList || config.CUSTOMIZED_DATE_LIST
@@ -640,6 +647,80 @@ export const getTianApiNetworkHot = async (type = 'default') => {
     }
   })
   return result
+}
+export const generateImg = async (content, port) => {
+  if (!config.PUSH_DEER) {
+    return null
+  }
+  const dir = path.resolve(fileURLToPath(import.meta.url), '../../../tools/generate-img/dist')
+  const assets = sirv(dir)
+  const server = http.createServer(assets)
+  const width = config.PUSH_DEER.width || 860
+  const padding = config.PUSH_DEER.padding || 40
+  const fontSize = config.PUSH_DEER.fontSize || 40
+  server.listen(port)
+  const browser = await puppeteer.launch({
+    args: ['--no-sandbox'],
+    defaultViewport: {
+      width,
+      height: 10000,
+    },
+  })
+  const page = await browser.newPage()
+  await page.goto(`http://localhost:${port}`, {
+    waitUntil: 'load',
+  })
+  await page.evaluate(`window.setMarkdownContent(\`${content.replace('`', '\\`')}\`)`)
+  await page.evaluate(`window.setWidth(${width})`)
+  await page.evaluate(`window.setPadding(${padding})`)
+  await page.evaluate(`window.setFontSize(${fontSize})`)
+  if (config.PUSH_DEER.style) {
+    await page.evaluate(`window.injectStyle(\`${config.PUSH_DEER.style}\`)`)
+  }
+  const result = await page.evaluate(() => window.render())
+  await page.close()
+  await browser.close()
+  server.close()
+  const data = result.split(',')
+  data.splice(0, 1)
+  const b64 = data.pop()
+  const len = b64.length
+  return Buffer.from(toByteArray(b64 + '='.repeat(3 - ((len + 3) % 4))))
+}
+
+/**
+ *
+ * @param buffer
+ */
+export const uploadToSMMS = async (buffer) => {
+  if (!config.PUSH_DEER || !config.PUSH_DEER.smmsToken) {
+    console.error('配置中 config.PUSH_DEER.smmsToken 未填写，无法请求图床服务')
+    return ''
+  }
+  if (!buffer) {
+    console.error('图片数据不存在')
+    return ''
+  }
+  const uploadPath = 'https://smms.app/api/v2/upload'
+  const fd = new FormData()
+  fd.append('smfile', buffer, {
+    filename: 'img.png',
+    contentType: 'image/png',
+  })
+  try {
+    const result = await axios.post(uploadPath, fd, {
+      headers: {
+        Authorization: config.PUSH_DEER.smmsToken,
+      },
+    })
+    if (result.status === 200 && result.data.success) {
+      return result.data.data.url
+    }
+    console.error('请求图床服务错误，错误信息为：', result.data.message)
+  } catch (e) {
+    console.error('请求图床服务错误，错误信息为：', e.message)
+  }
+  return ''
 }
 
 /**
@@ -798,7 +879,11 @@ export const model2Data = (templateId, wxTemplateData, urlencode = false, turnTo
     // 提取变量
     const param = paramText.match(/\{{2}(.*?)\.DATA}{2}/)
     const replaceText = wxTemplateData[param[1]]
-    return replaceText && (replaceText.value || replaceText.value === 0) ? replaceText.value : ''
+    const text = replaceText && (replaceText.value || replaceText.value === 0) ? replaceText.value : ''
+    if (config.IS_SHOW_COLOR) {
+      return `<span style="color: ${getColor()}">${text}</span>`
+    }
+    return text
   })
   // 清除每行前的空格
   targetValue = targetValue.replace(/(?<=\\n|^) +/gm, '')
@@ -855,6 +940,7 @@ const assembleOpenUrl = () => ''
  * @param wxTemplateData
  * @returns {Promise<{success: boolean, name}>}
  */
+let port = 24679
 const sendMessageByPushDeer = async (user, templateId, wxTemplateData) => {
   // 模板拼装
   const modelData = model2Data(templateId, wxTemplateData, false, false)
@@ -865,14 +951,26 @@ const sendMessageByPushDeer = async (user, templateId, wxTemplateData) => {
     }
   }
 
+  const useImage = config.PUSH_DEER && config.PUSH_DEER.useImage
+  let buffer
+  if (useImage) {
+    if (!config.PUSH_DEER.smmsToken) {
+      console.error('配置中 config.PUSH_DEER.smmsToken 未填写，无法请求图床服务')
+      return {
+        name: user.name,
+        success: false,
+      }
+    }
+    buffer = await generateImg(`# ${modelData.title}\n${modelData.desc}`, port++)
+  }
   const url = 'https://api2.pushdeer.com/message/push'
 
   // 发送消息
   const res = await axios.post(url, {
     pushkey: user.id,
-    text: modelData.title,
+    text: useImage ? await uploadToSMMS(buffer) : modelData.title,
     desp: modelData.desc,
-    type: 'markdown',
+    type: useImage ? 'image' : 'markdown',
   }, {
     headers: {
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36',

@@ -8,7 +8,10 @@ export default defineConfig({
       formats: ['cjs'],
       fileName: () => 'index.js',
     },
+    minify: false,
     outDir: 'cloud',
+    sourcemap: true,
+    emptyOutDir: false,
     rollupOptions: {
       external: [
         'node-schedule',
@@ -19,14 +22,22 @@ export default defineConfig({
         'dayjs',
         'dayjs/plugin/timezone.js',
         'dayjs/plugin/utc.js',
+        'puppeteer',
+        'path',
+        'fs',
+        'http',
+        'sirv',
+        'base64-img',
+        'form-data',
+        'url',
       ],
       plugins: [{
         async load(id) {
           if (/\/config\/exp-config\.js$/.test(id)) {
             return (await fs.readFile(id)).toString()
-              .replace('import USER_CONFIG from \'./index.cjs\'', 'var USER_CONFIG = require(\'../config/index.cjs\')')
+              .replace('import USER_CONFIG from \'./index.cjs\'', 'var USER_CONFIG = require(\'../config/index.cjs\')').replace(/fileURLToPath\(import\.meta\.url\), '\.\.\/\.\.\//g, '__dirname, \'')
           }
-          return null
+          return (await fs.readFile(id)).toString().replace(/fileURLToPath\(import\.meta\.url\), '\.\.\/\.\.\//g, '__dirname, \'')
         },
       }],
     },

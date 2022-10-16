@@ -7,12 +7,12 @@
   "scripts": {
     "dev": "cross-env APP_MODE=prod node main.js",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules npx jest",
-    "prepare": "husky install",
+    "prepare": "husky install; cd tools/generate-img; vite build",
     "lint": "eslint --fix .",
     "params-log": "cross-env APP_MODE=params-log node main.js",
     "server": "cross-env APP_MODE=server node main.js",
     "pm2start": "pm2 start start_pm2.js --name @wechat-push",
-    "build-cloud": "npm i && vite build && echo '{\"type\": \"commonjs\"}' > cloud/package.json",
+    "build-cloud": "rm -rf node_modules && npm i && vite build && echo '{\"type\": \"commonjs\"}' > cloud/package.json",
     "dev-cloud": "cross-env APP_MODE=prod node cloud"
   },
   "repository": {
@@ -30,11 +30,18 @@
   "homepage": "https://github.com/wangxinleo/wechat-public-account-push#readme",
   "dependencies": {
     "axios": "^0.27.2",
+    "base64-js": "^1.5.1",
+    "core-js": "^3.25.1",
     "dayjs": "^1.11.5",
+    "dom-to-image": "^2.6.0",
+    "form-data": "^4.0.0",
     "jsdom": "^20.0.0",
     "lodash": "^4.17.21",
     "lunar-javascript": "^1.2.33",
-    "node-schedule": "^2.1.0"
+    "marked": "^4.1.1",
+    "node-schedule": "^2.1.0",
+    "puppeteer": "^10.4.0",
+    "sirv": "^2.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.19.1",
