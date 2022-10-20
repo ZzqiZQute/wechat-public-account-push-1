@@ -517,7 +517,8 @@ describe('services', () => {
     expect(await getPoisonChickenSoup()).toEqual('毒鸡汤')
   })
   test('getBirthdayMessage', () => {
-    config.SWITCH = {}
+    config.SWITCH = { birthdayMessage: false }
+    config.USE_PASSAGE = 'wechat-test'
     expect(getBirthdayMessage()).toEqual('')
     config.SWITCH.birthdayMessage = true
     config.FESTIVALS = null
@@ -973,6 +974,7 @@ describe('services', () => {
       successPostIds: '无',
       successPostNum: 0,
     })
+    config.PUSH_DEER = undefined
     TEMPLATE_CONFIG.splice(0, TEMPLATE_CONFIG.length, {
       id: '0001',
       title: '亲爱的, 早上好',
@@ -1188,6 +1190,7 @@ describe('services', () => {
     expect(await getHolidaytts()).toEqual(null)
   })
   test('getCourseSchedule', () => {
+    config.USE_PASSAGE = 'wechat-test'
     MockDate.set('2022-09-24 08:00:00')
     config.SWITCH.courseSchedule = false
     expect(getCourseSchedule([])).toEqual('')
