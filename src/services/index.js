@@ -713,8 +713,13 @@ export const uploadToSMMS = async (buffer) => {
         Authorization: config.PUSH_DEER.smmsToken,
       },
     })
-    if (result.status === 200 && result.data.success) {
-      return result.data.data.url
+    if (result.status === 200) {
+      if (result.data.success) {
+        return result.data.data.url
+      }
+      if (result.data.code === 'image_repeated') {
+        return result.data.images
+      }
     }
     console.error('请求图床服务错误，错误信息为：', result.data.message)
   } catch (e) {
